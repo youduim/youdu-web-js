@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>有度js</title>
+    <script src="/youdu_webjs_example/jquery-3.2.1.min.js"></script>
+    <script src="/youdu_webjs_example/youdu_sdk-1.0.js"></script>
+    <script src="/youdu_webjs_example/vconsole.min.js"></script>
+    <script>
+        var vConsole = new VConsole();
+    </script>
+</head>
+
+<body>
+    <button type="button" id='select'">选择图片</button>
+    <button type="button" id='clear'" style='float: right;'>清空内容</button>
+    </br></br>
+    <button type="button" id='upload'">上传图片</button>
+    </br></br>
+    <button type="button" id="setMenu">设置右上角按钮为'保存'</button>
+    <button type="button" id="revertMenu">恢复默认按钮</button>
+    </br></br>
+    <button type="button" id="showMenu">显示右上角按钮</button>
+    <button type="button" id="hideMenu">隐藏右上角按钮</button>
+    </br></br>
+    <button type="button" id="org">打开组织架构</button>
+    </br></br>
+    <button type="button" id="org_dept">选择组织架构部门</button>
+    </br></br>
+    <button type="button" id="location">定位</button>
+    </br></br>
+    <button type="button" id="location2">实时定位</button>
+    </br></br>
+    <button type="button" id="wifi">获取wifi信息</button>
+    </br></br>
+    <button type="button" id="wifi2">实时获取wifi信息</button>
+    </br></br>
+    <button type="button" id="fetchSms">获取短信(Android)</button>
+    </br></br>
+    <button type="button" id="newSmsObserver">开始监听新短信(Android)</button>
+    </br></br>
+    <button type="button" id="scanQRCode0">扫一扫(有度处理结果)</button>
+    <button type="button" id="scanQRCode1">扫一扫(直接返回结果)</button>
+    </br></br>
+    <button type="button" id="closeWindow">关闭页面窗口</button>
+    </br></br>
+	<input type="file">选件附件（普通）
+	</br></br>
+    <button type="button" id="getFile">选择附件(有度接口仅用于IOS)</button>
+    </br></br>
+    <div id="output""></div>
+
+    <script>
+        // if (!window.iOSBridge) {
+        //     window.checkIosBridge = setInterval(() => {
+        //         if (window.iOSBridge) {
+        //             window.iOSBridge.callHandler('setMenuName', menuName, function(response) {})
+        //             window.clearInterval(window.checkIosBridge);
+        //         }
+        //     }, 200)
+        // } else {
+        //     iOSBridge.callHandler('setMenuName', menuName, function(response) {})
+        // }
+
+        //处理 js 调用 原生
+        $('#select').click(function(){
+            showAlbumByYD()
+        })
+
+        $('#clear').click(function(){
+            $('#output').html('')
+        })
+
+        $('#upload').click(function(){
+            uploadImageByYD(imagePath, true)
+        })
+
+        $('#setMenu').click(function(){
+            setMenuByYD('保存')
+        })
+
+        $('#revertMenu').click(function(){
+            setMenuByYD('')
+        })
+
+        $('#showMenu').click(function(){
+            enableMenuByYD(true)
+        })
+
+        $('#hideMenu').click(function(){
+            enableMenuByYD(false)
+        })
+
+        $('#org').click(function(){
+            openUserChooserByYD(3, '[]')
+        })
+
+        $('#org_dept').click(function(){
+            openDeptChooserByYD(20, '[6,26]')
+        })
+        
+        $('#location').click(function(){
+            startLocationByYD()
+        })
+
+        $('#location2').click(function(){
+            startLocationByYD(JSON.stringify({model: 1}))
+        })
+
+        $('#wifi').click(function(){
+            getWiFiBSSIDByYD()
+        })
+        $('#wifi2').click(function(){
+            getWiFiBSSIDByYD(JSON.stringify({model: 1}))
+        })
+
+        $('#fetchSms').click(function(){
+            if (isAnroid) {
+                fetchSmsByYD(0, 0, 4, 0, "行")
+            } else {
+                alert('不支持')
+            }
+        })
+
+        $('#newSmsObserver').click(function(){
+            if (isAnroid) {
+                setNewSmsObserverByYD()
+            } else {
+                alert('不支持')
+            }
+        })
+
+        $("#scanQRCode0").click(function(){
+            scanQRCodeByYD(false)
+        })
+        
+        $("#scanQRCode1").click(function(){
+            scanQRCodeByYD(true)
+        })
+
+        $("#closeWindow").click(function(){
+            closeYdWindow()
+        })
+
+        $("#getFile").click(function(){
+            getInputResult()
+        })
+
+        // 回调
+        var imagePath
+        function onYDAlbumSelected(path) {
+            $('#output').append('<br/>选择图片结果:')
+            $('#output').append('<br/>path:' + path)
+            imagePath = path
+        }
+
+        function onYDUploadResult(path, errorCode, fileId) {
+            $('#output').append('<br/>上传结果:')
+            $('#output').append('<br/>path:' + path)
+            $('#output').append('<br/>errorCode:' + errorCode)
+            $('#output').append('<br/>fileId:' + fileId)
+        }
+
+        function onMenuClick(name) {
+            $('#output').append('<br/>右上角按钮被点击:')
+            $('#output').append('<br>' + name);
+        }
+
+        function onUserChooserResult(jsonArray) {
+            console.log('onUserChooserResult', jsonArray)
+            $('#output').append('<br/>打开组织架构结果:');
+            $('#output').append('<br/>' + JSON.stringify(jsonArray));
+        }
+
+        function onDeptChooserResult(jsonArray) {
+            console.log('onDeptChooserResult', jsonArray);
+            $('#output').append('<br/>选择组织架构部门结果:')
+            $('#output').append('<br/>' + JSON.stringify(jsonArray));
+        }
+
+        function onLocationChanged(json) {
+            $('#output').append('<br/>定位结果:')
+            $('#output').append('<br/>' + JSON.stringify(json));
+        }
+
+        function onGetWiFiBSSID(json) {
+            $('#output').append('<br/>获取wifi信息结果:')
+            $('#output').append('<br/>' + JSON.stringify(json));
+        }
+
+        function onSms(requestId, jsonArray) {
+            $('#output').append('<br/>获取短信结果:')
+            $('#output').append('<br/>requestId:' + requestId)
+            $('#output').append('<br/>' + JSON.stringify(jsonArray))
+        }
+        
+        function onNewSms(json) {
+            $('#output').append('<br/>新短信:');
+            $('#output').append('<br/>' + JSON.stringify(json));
+        }
+
+        function onScanQRCodeResult(success, result) {
+            $('#output').append('<br/>二维码结果:');
+            $('#output').append('<br/>success: ' + success);
+            $('#output').append('<br/>result: ' + result);
+        }
+
+        function onGetInputResult(data) {
+            console.log(typeof(data))
+            console.log(data)
+            $('#output').append('<br/>选择附件结果:');
+            $('#output').append('<br/>result: ' + data);
+        }
+
+    </script>
+</body>
+
+</html>
