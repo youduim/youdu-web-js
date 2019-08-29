@@ -5,216 +5,321 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>有度js</title>
-    <script src="/youdu_webjs_example/jquery-3.2.1.min.js"></script>
-    <script src="/youdu_webjs_example/youdu_sdk-1.0.js"></script>
-    <script src="/youdu_webjs_example/vconsole.min.js"></script>
+    <script src="youdu_webjs/jquery-3.2.1.min.js"></script>
+    <script src="youdu_webjs/youdu_sdk-1.0.js"></script>
+    <script src="youdu_webjs/vconsole.min.js"></script>
+    <!--<link rel="stylesheet" href="bootstrap.min.css">-->
     <script>
         var vConsole = new VConsole();
     </script>
+    <style type="text/css">
+        .btn {
+            border-Radius: 8px;
+            padding: 5px 10px;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #fff;
+            background-color: #0daef9;
+            border-color: #428bca;
+        }
+
+        ul {
+            padding-left: 0;
+        }
+
+        li {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        li .btn {
+            width: 100%;
+        }
+
+        div {
+            word-break: break-all;
+        }
+
+        .a-upload {
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            display: inline-block;
+            border-Radius: 8px;
+            padding: 5px 10px;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #fff;
+            background-color: #0daef9;
+            border-color: #428bca;
+            width: 100%;
+            text-align: center;
+            margin: 0;
+            box-sizing: border-box;
+            text-decoration: none;
+        }
+
+        .a-upload  input {
+            position: absolute;
+            right: 0;
+            top: 0;
+            opacity: 0;
+            filter: alpha(opacity=0);
+            cursor: pointer
+        }
+
+    </style>
 </head>
 
 <body>
-    <button type="button" id='select'">选择图片</button>
-    <button type="button" id='clear'" style='float: right;'>清空内容</button>
-    </br></br>
-    <button type="button" id='upload'">上传图片</button>
-    </br></br>
-    <button type="button" id="setMenu">设置右上角按钮为'保存'</button>
-    <button type="button" id="revertMenu">恢复默认按钮</button>
-    </br></br>
-    <button type="button" id="showMenu">显示右上角按钮</button>
-    <button type="button" id="hideMenu">隐藏右上角按钮</button>
-    </br></br>
-    <button type="button" id="org">打开组织架构</button>
-    </br></br>
-    <button type="button" id="org_dept">选择组织架构部门</button>
-    </br></br>
-    <button type="button" id="location">定位</button>
-    </br></br>
-    <button type="button" id="location2">实时定位</button>
-    </br></br>
-    <button type="button" id="wifi">获取wifi信息</button>
-    </br></br>
-    <button type="button" id="wifi2">实时获取wifi信息</button>
-    </br></br>
-    <button type="button" id="fetchSms">获取短信(Android)</button>
-    </br></br>
-    <button type="button" id="newSmsObserver">开始监听新短信(Android)</button>
-    </br></br>
-    <button type="button" id="scanQRCode0">扫一扫(有度处理结果)</button>
-    <button type="button" id="scanQRCode1">扫一扫(直接返回结果)</button>
-    </br></br>
-    <button type="button" id="closeWindow">关闭页面窗口</button>
-    </br></br>
-	<input type="file">选件附件（普通）
-	</br></br>
-    <button type="button" id="getFile">选择附件(有度接口仅用于IOS)</button>
-    </br></br>
-    <div id="output""></div>
 
-    <script>
-        // if (!window.iOSBridge) {
-        //     window.checkIosBridge = setInterval(() => {
-        //         if (window.iOSBridge) {
-        //             window.iOSBridge.callHandler('setMenuName', menuName, function(response) {})
-        //             window.clearInterval(window.checkIosBridge);
-        //         }
-        //     }, 200)
-        // } else {
-        //     iOSBridge.callHandler('setMenuName', menuName, function(response) {})
-        // }
+<div style="max-width: 400px;margin:0 auto;">
+    <h1 style="margin-top: 30px;">有度WEB JS DEMO</h1>
+<p style="position:relative;">
+    <button type="button" class="btn btn-primary btn-sm" id='clear' style='right:10px;top:10px;position:fixed;background-color: #04be02;'>清空内容</button>
+</p>
+<ul >
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id='select'>选择图片</button>
+        <div id="selectDiv">
+        </div>
+    </li>
 
-        //处理 js 调用 原生
-        $('#select').click(function(){
-            showAlbumByYD()
-        })
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id='upload'>上传图片</button>
+        <div id="uploadDiv">
+        </div>
+    </li>
 
-        $('#clear').click(function(){
-            $('#output').html('')
-        })
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id="setMenu">设置右上角按钮为'保存'</button>
+        <div id="setMenuDiv">
+        </div>
+    </li>
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id="revertMenu">恢复默认按钮</button>
+    </li>
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id="showMenu">显示右上角按钮</button>
+    </li>
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id="hideMenu">隐藏右上角按钮</button>
+    </li>
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id="org">打开组织架构</button>
+        <div id="orgDiv"></div>
+    </li>
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id="org_dept">选择组织架构部门</button>
+        <div id="orgDeptDiv"></div>
+    </li>
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id="location">定位</button>
+        <div id="locationDiv"></div>
+    </li>
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id="location2">实时定位</button>
+    </li>
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id="wifi">获取wifi信息</button>
+        <div id="wifiDiv"></div>
+    </li>
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id="wifi2">实时获取wifi信息</button>
+    </li>
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id="fetchSms">获取短信(Android)</button>
+        <div id="fetchSmsDiv"></div>
+    </li>
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id="newSmsObserver">开始监听新短信(Android)</button>
+        <div id="newSmsObserverDiv"></div>
+    </li>
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id="scanQRCode0">扫一扫(有度处理结果)</button>
+    </li>
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id="scanQRCode1">扫一扫(直接返回结果)</button>
+        <div id="scanQRCode1Div"></div>
+    </li>
+    <li>
+        <a href="javascript:;" class="a-upload">
+            <input type="file" value="选件附件（普通）">选件附件（普通）
+        </a>
+    </li>
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id="getFile">选择附件(有度接口仅用于IOS)</button>
+        <div id="getFileDiv"></div>
+    </li>
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id="closeWindow">关闭页面窗口</button>
+    </li>
 
-        $('#upload').click(function(){
-            uploadImageByYD(imagePath, true)
-        })
+</ul>
+</div>
+<script>
+    // if (!window.iOSBridge) {
+    //     window.checkIosBridge = setInterval(() => {
+    //         if (window.iOSBridge) {
+    //             window.iOSBridge.callHandler('setMenuName', menuName, function(response) {})
+    //             window.clearInterval(window.checkIosBridge);
+    //         }
+    //     }, 200)
+    // } else {
+    //     iOSBridge.callHandler('setMenuName', menuName, function(response) {})
+    // }
 
-        $('#setMenu').click(function(){
-            setMenuByYD('保存')
-        })
+    //处理 js 调用 原生
+    $('#select').click(function () {
+        showAlbumByYD()
+    })
 
-        $('#revertMenu').click(function(){
-            setMenuByYD('')
-        })
+    $('#clear').click(function () {
+        $("div[id$='Div']").html('')
+    })
 
-        $('#showMenu').click(function(){
-            enableMenuByYD(true)
-        })
+    $('#upload').click(function () {
+        uploadImageByYD(imagePath, true)
+    })
 
-        $('#hideMenu').click(function(){
-            enableMenuByYD(false)
-        })
+    $('#setMenu').click(function () {
+        setMenuByYD('保存')
+    })
 
-        $('#org').click(function(){
-            openUserChooserByYD(3, '[]')
-        })
+    $('#revertMenu').click(function () {
+        setMenuByYD('')
+    })
 
-        $('#org_dept').click(function(){
-            openDeptChooserByYD(20, '[6,26]')
-        })
-        
-        $('#location').click(function(){
-            startLocationByYD()
-        })
+    $('#showMenu').click(function () {
+        enableMenuByYD(true)
+    })
 
-        $('#location2').click(function(){
-            startLocationByYD(JSON.stringify({model: 1}))
-        })
+    $('#hideMenu').click(function () {
+        enableMenuByYD(false)
+    })
 
-        $('#wifi').click(function(){
-            getWiFiBSSIDByYD()
-        })
-        $('#wifi2').click(function(){
-            getWiFiBSSIDByYD(JSON.stringify({model: 1}))
-        })
+    $('#org').click(function () {
+        openUserChooserByYD(3, '[]')
+    })
 
-        $('#fetchSms').click(function(){
-            if (isAnroid) {
-                fetchSmsByYD(0, 0, 4, 0, "行")
-            } else {
-                alert('不支持')
-            }
-        })
+    $('#org_dept').click(function () {
+        openDeptChooserByYD(20, '[6,26]')
+    })
 
-        $('#newSmsObserver').click(function(){
-            if (isAnroid) {
-                setNewSmsObserverByYD()
-            } else {
-                alert('不支持')
-            }
-        })
+    $('#location').click(function () {
+        startLocationByYD()
+    })
 
-        $("#scanQRCode0").click(function(){
-            scanQRCodeByYD(false)
-        })
-        
-        $("#scanQRCode1").click(function(){
-            scanQRCodeByYD(true)
-        })
+    $('#location2').click(function () {
+        startLocationByYD(JSON.stringify({model: 1}))
+    })
 
-        $("#closeWindow").click(function(){
-            closeYdWindow()
-        })
+    $('#wifi').click(function () {
+        getWiFiBSSIDByYD()
+    })
+    $('#wifi2').click(function () {
+        getWiFiBSSIDByYD(JSON.stringify({model: 1}))
+    })
 
-        $("#getFile").click(function(){
-            getInputResult()
-        })
-
-        // 回调
-        var imagePath
-        function onYDAlbumSelected(path) {
-            $('#output').append('<br/>选择图片结果:')
-            $('#output').append('<br/>path:' + path)
-            imagePath = path
+    $('#fetchSms').click(function () {
+        if (isAnroid) {
+            fetchSmsByYD(0, 0, 4, 0, "行")
+        } else {
+            alert('不支持')
         }
+    })
 
-        function onYDUploadResult(path, errorCode, fileId) {
-            $('#output').append('<br/>上传结果:')
-            $('#output').append('<br/>path:' + path)
-            $('#output').append('<br/>errorCode:' + errorCode)
-            $('#output').append('<br/>fileId:' + fileId)
+    $('#newSmsObserver').click(function () {
+        if (isAnroid) {
+            setNewSmsObserverByYD()
+        } else {
+            alert('不支持')
         }
+    })
 
-        function onMenuClick(name) {
-            $('#output').append('<br/>右上角按钮被点击:')
-            $('#output').append('<br>' + name);
-        }
+    $("#scanQRCode0").click(function () {
+        scanQRCodeByYD(false)
+    })
 
-        function onUserChooserResult(jsonArray) {
-            console.log('onUserChooserResult', jsonArray)
-            $('#output').append('<br/>打开组织架构结果:');
-            $('#output').append('<br/>' + JSON.stringify(jsonArray));
-        }
+    $("#scanQRCode1").click(function () {
+        scanQRCodeByYD(true)
+    })
 
-        function onDeptChooserResult(jsonArray) {
-            console.log('onDeptChooserResult', jsonArray);
-            $('#output').append('<br/>选择组织架构部门结果:')
-            $('#output').append('<br/>' + JSON.stringify(jsonArray));
-        }
+    $("#closeWindow").click(function () {
+        closeYdWindow();
+    });
 
-        function onLocationChanged(json) {
-            $('#output').append('<br/>定位结果:')
-            $('#output').append('<br/>' + JSON.stringify(json));
-        }
+    $("#getFile").click(function () {
+        getInputResult()
+    })
 
-        function onGetWiFiBSSID(json) {
-            $('#output').append('<br/>获取wifi信息结果:')
-            $('#output').append('<br/>' + JSON.stringify(json));
-        }
+    // 回调
+    var imagePath
 
-        function onSms(requestId, jsonArray) {
-            $('#output').append('<br/>获取短信结果:')
-            $('#output').append('<br/>requestId:' + requestId)
-            $('#output').append('<br/>' + JSON.stringify(jsonArray))
-        }
-        
-        function onNewSms(json) {
-            $('#output').append('<br/>新短信:');
-            $('#output').append('<br/>' + JSON.stringify(json));
-        }
+    function onYDAlbumSelected(path) {
+        $('#selectDiv').append('选择图片结果:<br/>')
+        $('#selectDiv').append('path:' + path + '')
+        imagePath = path
+    }
 
-        function onScanQRCodeResult(success, result) {
-            $('#output').append('<br/>二维码结果:');
-            $('#output').append('<br/>success: ' + success);
-            $('#output').append('<br/>result: ' + result);
-        }
+    function onYDUploadResult(path, errorCode, fileId) {
+        $('#uploadDiv').append('<br/>上传结果:')
+        $('#uploadDiv').append('<br/>path:' + path)
+        $('#uploadDiv').append('<br/>errorCode:' + errorCode)
+        $('#uploadDiv').append('<br/>fileId:' + fileId)
+    }
 
-        function onGetInputResult(data) {
-            console.log(typeof(data))
-            console.log(data)
-            $('#output').append('<br/>选择附件结果:');
-            $('#output').append('<br/>result: ' + data);
-        }
+    function onMenuClick(name) {
+        alert("右上角按钮被点击:" + name)
+    }
 
-    </script>
+    function onUserChooserResult(jsonArray) {
+        console.log('onUserChooserResult', jsonArray)
+        $('#orgDiv').append('<br/>打开组织架构结果:');
+        $('#orgDiv').append('<br/>' + JSON.stringify(jsonArray));
+    }
+
+    function onDeptChooserResult(jsonArray) {
+        console.log('onDeptChooserResult', jsonArray);
+        $('#orgDeptDiv').append('<br/>选择组织架构部门结果:')
+        $('#orgDeptDiv').append('<br/>' + JSON.stringify(jsonArray));
+    }
+
+    function onLocationChanged(json) {
+        $('#locationDiv').append('<br/>定位结果:')
+        $('#locationDiv').append('<br/>' + JSON.stringify(json));
+    }
+
+    function onGetWiFiBSSID(json) {
+        $('#wifiDiv').append('<br/>获取wifi信息结果:')
+        $('#wifiDiv').append('<br/>' + JSON.stringify(json));
+    }
+
+    function onSms(requestId, jsonArray) {
+        $('#fetchSmsDiv').append('<br/>获取短信结果:')
+        $('#fetchSmsDiv').append('<br/>requestId:' + requestId)
+        $('#fetchSmsDiv').append('<br/>' + JSON.stringify(jsonArray))
+    }
+
+    function onNewSms(json) {
+        $('#newSmsObserverDiv').append('<br/>新短信:');
+        $('#newSmsObserverDiv').append('<br/>' + JSON.stringify(json));
+    }
+
+    function onScanQRCodeResult(success, result) {
+        $('#scanQRCode1Div').append('<br/>二维码结果:');
+        $('#scanQRCode1Div').append('<br/>success: ' + success);
+        $('#scanQRCode1Div').append('<br/>result: ' + result);
+    }
+
+    function onGetInputResult(data) {
+        console.log(typeof (data))
+        console.log(data)
+        $('#getFileDiv').append('<br/>选择附件结果:');
+        $('#getFileDiv').append('<br/>result: ' + data);
+    }
+
+</script>
 </body>
 
 </html>
