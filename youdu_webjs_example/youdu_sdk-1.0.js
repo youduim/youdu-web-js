@@ -1,6 +1,6 @@
 var iOSBridge
 var isAnroid = (/android/i.test(navigator.userAgent.toLowerCase()));
-var isiOS = (/iphone/i.test(navigator.userAgent.toLowerCase()));
+var isiOS = (/iphone|ipad/i.test(navigator.userAgent.toLowerCase()));
 var isYoudu = (/youdu/i.test(navigator.userAgent.toLowerCase()));
 
 function setupWebViewJavascriptBridge(callback) {
@@ -140,4 +140,12 @@ function closeYdWindow() {
 
 function getInputResult() {
 	iOSBridge.callHandler('getInputResult', function(response) {})
+}
+
+function enableBottomNavigatorOn() {
+	iOSBridge.callHandler('enableBottomNavigator', {'enable': true}, function(response) {})
+}
+
+function enableBottomNavigatorOff() {
+	iOSBridge.callHandler('enableBottomNavigator', {'enable': false}, function(response) {})
 }

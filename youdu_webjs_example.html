@@ -154,7 +154,12 @@
     <li>
         <button type="button" class="btn btn-primary btn-sm" id="closeWindow">关闭页面窗口</button>
     </li>
-
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id="enableBottomNavigatorOn">显示底部菜单</button>
+    </li>
+    <li>
+        <button type="button" class="btn btn-primary btn-sm" id="enableBottomNavigatorOff">隐藏底部菜单</button>
+    </li>
 </ul>
 </div>
 <script>
@@ -251,6 +256,14 @@
 
     $("#getFile").click(function () {
         getInputResult()
+    })
+
+    $("#enableBottomNavigatorOn").click(function () {
+        enableBottomNavigatorOn()
+    })
+
+    $("#enableBottomNavigatorOff").click(function () {
+        enableBottomNavigatorOff()
     })
 
     // 回调
