@@ -130,6 +130,14 @@ function scanQRCodeByYD(needResult) {
 	}
 }
 
+function pauseRingAndVibrateByYD() {
+	if (isAnroid) {
+		window.youdu.pauseRingAndVibrate()
+	} else if (isiOS) {
+		iOSBridge.callHandler('pauseRingAndVibrate', {}, function(response) {})
+	}
+}
+
 function closeYdWindow() {
 	if (isAnroid) {
 		window.youdu.closeWindow()
