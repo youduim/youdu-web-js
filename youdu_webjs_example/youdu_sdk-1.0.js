@@ -157,3 +157,28 @@ function enableBottomNavigatorOn() {
 function enableBottomNavigatorOff() {
 	iOSBridge.callHandler('enableBottomNavigator', {'enable': false}, function(response) {})
 }
+
+function getYDTokenByYD() {
+	if (isAnroid) {
+		window.youdu.getYdToken()
+	} else if(isiOS) {
+		iOSBridge.callHandler('getYdToken', {}, function(response) {})
+	}
+}
+
+function getDevIDByYD() {
+	if (isAnroid) {
+		window.youdu.getDevId()
+	} else if(isiOS) {
+		iOSBridge.callHandler('getDevId', {}, function(response) {})
+	}
+}
+
+function startCameraByYD() {
+	if (isAnroid) {
+		window.yami.startCamera()
+	} else if (isiOS) {
+		iOSBridge.callHandler('startCamera', {},function(response) {})
+	}
+}
+

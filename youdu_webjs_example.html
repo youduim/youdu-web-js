@@ -274,7 +274,26 @@
         enableBottomNavigatorOff()
     })
 
+ 
+    function onGetYdToken(jsonObj) {
+        $('#output').append('<br/>获取头像结果:')
+        $('#output').append('<br/>' + JSON.stringify(jsonObj));
+    }
 
+    function onGetWiFiBSSID(jsonObj) {
+        $('#output').append('<br/>获取wifi结果:')
+        $('#output').append('<br/>' + JSON.stringify(jsonObj));
+    }
+
+    function onGetDevId(jsonObj) {
+        $('#output').append('<br/>获取devId结果:')
+        $('#output').append('<br/>' + JSON.stringify(jsonObj));
+    }
+
+    function onCameraResult(jsonObj) {
+        $('#output').append('<br/>获取摄像头结果:')
+        $('#output').append('<br/>' + JSON.stringify(jsonObj));
+    }
 
     // 回调
     var imagePath
